@@ -1,0 +1,10 @@
+/Users/aaroha/Desktop/CodeCrafters/codecrafters-bittorrent-rust/target/debug/deps/libserde_bencode-33ca6ee8037a11bf.rmeta: /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/lib.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/error.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/ser.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/ser/string.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/de.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/value.rs
+
+/Users/aaroha/Desktop/CodeCrafters/codecrafters-bittorrent-rust/target/debug/deps/serde_bencode-33ca6ee8037a11bf.d: /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/lib.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/error.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/ser.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/ser/string.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/de.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/value.rs
+
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/lib.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/error.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/ser.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/ser/string.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/de.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/serde_bencode-0.2.3/src/value.rs:

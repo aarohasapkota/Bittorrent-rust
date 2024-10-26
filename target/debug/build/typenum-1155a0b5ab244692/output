@@ -1,0 +1,3 @@
+cargo:rerun-if-changed=build/main.rs
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/aaroha/Desktop/CodeCrafters/codecrafters-bittorrent-rust/target/debug/build/typenum-1155a0b5ab244692/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/Users/aaroha/Desktop/CodeCrafters/codecrafters-bittorrent-rust/target/debug/build/typenum-1155a0b5ab244692/out/op.rs
