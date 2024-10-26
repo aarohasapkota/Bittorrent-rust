@@ -1,0 +1,12 @@
+/Users/aaroha/Desktop/CodeCrafters/codecrafters-bittorrent-rust/target/debug/deps/libtempfile-321cad5cb1629e5f.rmeta: /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/lib.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/dir.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/error.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/mod.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/imp/mod.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/spooled.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/util.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/imp/unix.rs
+
+/Users/aaroha/Desktop/CodeCrafters/codecrafters-bittorrent-rust/target/debug/deps/tempfile-321cad5cb1629e5f.d: /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/lib.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/dir.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/error.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/mod.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/imp/mod.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/spooled.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/util.rs /Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/imp/unix.rs
+
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/lib.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/dir.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/error.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/mod.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/imp/mod.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/spooled.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/util.rs:
+/Users/aaroha/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tempfile-3.7.1/src/file/imp/unix.rs:
