@@ -1,57 +1,14 @@
+use anyhow::anyhow;
 use serde_json;
-use std::env;
-use std::collections::BTreeMap;
-use serde_json::Map;
 
+use std::{collections::HashMap, env, path::PathBuf};
 // Available if you need it!
 // use serde_bencode
-
 #[allow(dead_code)]
-fn decode_bencoded_value(encoded_value: &str) -> anyhow::Result<(serde_json::Value, usize)> {
-    match encoded_value.chars().next() {
-        Some('i') => {
-            let end = encoded_value.find('e').ok_or_else(|| anyhow::anyhow!("Invalid integer encoding"))?;
-            let num = encoded_value[1..end].parse::<i64>()?;
-            Ok((serde_json::Value::Number(num.into()), end + 1))
-        }
-        Some('l') => {
-            let mut index = 1;
-            let mut elements = Vec::new();
-            while encoded_value.chars().nth(index) != Some('e') {
-                let (element, len) = decode_bencoded_value(&encoded_value[index..])?;
-                elements.push(element);
-                index += len;
-            }
-            Ok((serde_json::Value::Array(elements), index + 1))
-        }
-        Some('d') => {
-            let mut index = 1;
-            let mut map = BTreeMap::new();
-            while encoded_value.chars().nth(index) != Some('e') {
-                let (key, key_len) = decode_bencoded_value(&encoded_value[index..])?;
-                index += key_len;
-                let (value, value_len) = decode_bencoded_value(&encoded_value[index..])?;
-                index += value_len;
-                if let serde_json::Value::String(key_str) = key {
-                    map.insert(key_str, value);
-                } else {
-                    anyhow::bail!("Dictionary keys must be strings");
-                }
-            }
-            let json_map: Map<String, serde_json::Value> = map.into_iter().collect();
-            Ok((serde_json::Value::Object(json_map), index + 1))
-        }
-        Some(c) if c.is_ascii_digit() => {
-            let colon_pos = encoded_value.find(':').ok_or_else(|| anyhow::anyhow!("Invalid string encoding"))?;
-            let len: usize = encoded_value[..colon_pos].parse()?;
-            let start = colon_pos + 1;
-            let end = start + len;
-            Ok((serde_json::Value::String(encoded_value[start..end].to_string()), end))
-        }
-        _ => anyhow::bail!("Invalid Bencode value"),
-    }
+fn decode_bencoded_value(encoded_value: &str) -> anyhow::Result<serde_json::Value> {
+    let value: serde_bencode::value::Value = serde_bencode::from_str(encoded_value)?;
+    convert(value)
 }
-
 fn convert(value: serde_bencode::value::Value) -> anyhow::Result<serde_json::Value> {
     match value {
         serde_bencode::value::Value::Bytes(b) => {
@@ -68,21 +25,118 @@ fn convert(value: serde_bencode::value::Value) -> anyhow::Result<serde_json::Val
                 .collect::<anyhow::Result<Vec<serde_json::Value>>>()?;
             Ok(serde_json::Value::Array(array))
         }
-        _ => {
-            panic!("Unhandled encoded value: {:?}", value)
+        serde_bencode::value::Value::Dict(d) => {
+            let object = d
+                .into_iter()
+                .map(|(k, v)| {
+                    let key = String::from_utf8(k)?;
+                    let value = convert(v)?;
+                    Ok((key, value))
+                })
+                .collect::<anyhow::Result<serde_json::Map<String, serde_json::Value>>>()?;
+            Ok(serde_json::Value::Object(object))
         }
     }
 }
-
+// announce:
+// URL to a "tracker", which is a central server that keeps track of peers participating in the sharing of a torrent.
+// info:
+// A dictionary with keys:
+//     length: size of the file in bytes, for single-file torrents
+//     name: suggested name to save the file / directory as
+//     piece length: number of bytes in each piece
+//     pieces: concatenated SHA-1 hashes of each piece
+struct TorrentInfo {
+    length: i64,
+    name: String,
+    piece_length: i64,
+    pieces: Vec<u8>,
+}
+struct Torrent {
+    announce: reqwest::Url,
+    info: TorrentInfo,
+}
+fn extract_string(
+    key: &str,
+    d: &HashMap<Vec<u8>, serde_bencode::value::Value>,
+) -> anyhow::Result<String> {
+    d.get(key.as_bytes())
+        .and_then(|v| match v {
+            serde_bencode::value::Value::Bytes(b) => String::from_utf8(b.clone()).ok(),
+            _ => None,
+        })
+        .ok_or(anyhow!("Missing field: {}", key))
+}
+fn extract_bytes(
+    key: &str,
+    d: &HashMap<Vec<u8>, serde_bencode::value::Value>,
+) -> anyhow::Result<Vec<u8>> {
+    d.get(key.as_bytes())
+        .and_then(|v| match v {
+            serde_bencode::value::Value::Bytes(b) => Some(b.clone()),
+            _ => None,
+        })
+        .ok_or(anyhow!("Missing field: {}", key))
+}
+fn extract_dict(
+    key: &str,
+    d: &HashMap<Vec<u8>, serde_bencode::value::Value>,
+) -> anyhow::Result<HashMap<Vec<u8>, serde_bencode::value::Value>> {
+    d.get(key.as_bytes())
+        .and_then(|v| match v {
+            serde_bencode::value::Value::Dict(d) => Some(d.clone()),
+            _ => None,
+        })
+        .ok_or(anyhow!("Missing field: {}", key))
+}
+fn extract_int(
+    key: &str,
+    d: &HashMap<Vec<u8>, serde_bencode::value::Value>,
+) -> anyhow::Result<i64> {
+    d.get(key.as_bytes())
+        .and_then(|v| match v {
+            serde_bencode::value::Value::Int(i) => Some(*i),
+            _ => None,
+        })
+        .ok_or(anyhow!("Missing field: {}", key))
+}
+fn parse_torrent_file<T>(file_path: T) -> anyhow::Result<Torrent>
+where
+    T: Into<PathBuf>,
+{
+    let content = std::fs::read(file_path.into())?;
+    let value: serde_bencode::value::Value = serde_bencode::from_bytes(content.as_slice())?;
+    match value {
+        serde_bencode::value::Value::Dict(d) => {
+            let announce = extract_string("announce", &d)?;
+            let info = extract_dict("info", &d)?;
+            Ok(Torrent {
+                announce: reqwest::Url::parse(announce.as_str())?,
+                info: TorrentInfo {
+                    length: extract_int("length", &info)?,
+                    name: extract_string("name", &info)?,
+                    piece_length: extract_int("piece length", &info)?,
+                    pieces: extract_bytes("pieces", &info)?,
+                },
+            })
+        }
+        _ => Err(anyhow!("Incorrect format, required dict")),
+    }
+}
 // Usage: your_bittorrent.sh decode "<encoded_value>"
 fn main() -> anyhow::Result<()> {
     let args: Vec<String> = env::args().collect();
     let command = &args[1];
-
     if command == "decode" {
+        // Uncomment this block to pass the first stage
         let encoded_value = &args[2];
-        let (decoded_value, _) = decode_bencoded_value(encoded_value)?;
+        let decoded_value = decode_bencoded_value(encoded_value)?;
         println!("{}", decoded_value.to_string());
+    } else if command == "info" {
+        let file_name = &args[2];
+        let torrent = parse_torrent_file(file_name)?;
+        println!("Tracker URL: {}", torrent.announce);
+        println!("Length: {}", torrent.info.length);
     } else {
         println!("unknown command: {}", args[1])
     }
